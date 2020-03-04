@@ -1,12 +1,9 @@
 package mate.academy.matrixandword;
 
 public class SquareMatrix {
-    private Character[][] matrix;
+    private final Character[][] matrix;
 
-    public SquareMatrix() {
-    }
-
-    public void createMatrix(String s) {
+    public SquareMatrix(String s) {
         if (s == null) {
             throw new IllegalArgumentException("String is null. Can't create square matrix");
         }

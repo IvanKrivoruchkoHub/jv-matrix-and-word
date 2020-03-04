@@ -1,37 +1,30 @@
 package mate.academy.matrixandword;
 
 import org.junit.Assert;
-import org.junit.Before;
+
 import org.junit.Test;
 
 public class SquareMatrixTest {
 
-    private SquareMatrix squareMatrix;
-
-    @Before
-    public void init() {
-        squareMatrix = new SquareMatrix();
-    }
-
     @Test(expected = IllegalArgumentException.class)
     public void matrixStringNotOk() {
-        squareMatrix.createMatrix("QLG");
+        new SquareMatrix("QLG");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void matrixStringNull() {
-        squareMatrix.createMatrix(null);
+        new SquareMatrix(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void wordLengthBiggerThanMatrixLength() {
-        squareMatrix.createMatrix("QLGY");
+        SquareMatrix squareMatrix = new SquareMatrix("QLGY");
         squareMatrix.getCeilOfLetters("hello");
     }
 
     @Test
     public void getCeilOfLettersOk() {
-        squareMatrix.createMatrix("QUENPVKIJAVNGEAG");
+        SquareMatrix squareMatrix = new SquareMatrix("QUENPVKIJAVNGEAG");
         String actualResult = squareMatrix.getCeilOfLetters("king");
         Assert.assertEquals("[1, 2] -> [1, 3] -> [2, 3] -> [3, 3]", actualResult);
 
@@ -41,7 +34,7 @@ public class SquareMatrixTest {
 
     @Test
     public void matrixNotConsistWord() {
-        squareMatrix.createMatrix("QUENPVKIJAVNGEAG");
+        SquareMatrix squareMatrix = new SquareMatrix("QUENPVKIJAVNGEAG");
         String actualResult = squareMatrix.getCeilOfLetters("hello");
         Assert.assertEquals("", actualResult);
     }
