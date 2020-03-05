@@ -1,9 +1,8 @@
 package mate.academy.matrixandword;
 
-public class SquareMatrix {
-    private final Character[][] matrix;
+public class SquareMatrixService {
 
-    public SquareMatrix(String s) {
+    public Character[][] getSquareMatrixCharacters(String s) {
         if (s == null) {
             throw new IllegalArgumentException("String is null. Can't create square matrix");
         }
@@ -19,10 +18,10 @@ public class SquareMatrix {
                 matrix[i][j] = s.charAt(q++);
             }
         }
-        this.matrix = matrix;
+        return matrix;
     }
 
-    public String getCeilOfLetters(String word) {
+    public String getCeilOfLetters(Character[][] matrix, String word) {
         if (word == null) {
             throw new IllegalArgumentException("Word is null");
         }
@@ -36,7 +35,7 @@ public class SquareMatrix {
                 if (wordCharArray[q] == matrix[i][j]) {
                     result.append(String.format("[%d, %d]", i, j)).append(" -> ");
                     int startLen = result.length();
-                    result = checkCeil(result, i, j, wordCharArray, q + 1);
+                    result = checkCeil(matrix, result, i, j, wordCharArray, q + 1);
                     if (startLen == result.length()) {
                         result = new StringBuilder();
                     } else {
@@ -48,7 +47,7 @@ public class SquareMatrix {
         return "";
     }
 
-    private StringBuilder checkOneDirection(int row, int column,
+    private StringBuilder checkOneDirection(Character[][] matrix, int row, int column,
                                             char[] wordCharArray, int q, StringBuilder sb) {
         if (matrix[row][column] == wordCharArray[q]
                 && sb.indexOf(String.format("[%d, %d]", row, column)) == -1) {
@@ -58,7 +57,7 @@ public class SquareMatrix {
                 sb.append(" -> ");
             }
             int lenAfterAppend = sb.length();
-            sb = checkCeil(sb, row, column, wordCharArray, q + 1);
+            sb = checkCeil(matrix, sb, row, column, wordCharArray, q + 1);
             if (sb.length() == lenAfterAppend && q != wordCharArray.length - 1) {
                 sb.delete(lenBeforeAppend, sb.length());
             }
@@ -66,132 +65,141 @@ public class SquareMatrix {
         return sb;
     }
 
-    private StringBuilder checkLeftAndUpDirection(StringBuilder sb, int row, int column,
-                                                  char[] wordCharArray, int q) {
+    private StringBuilder checkLeftAndUpDirection(Character[][] matrix,StringBuilder sb, int row,
+                                                  int column, char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkOneDirection(row, column - 1, wordCharArray, q, sb);
+        sb = checkOneDirection(matrix, row, column - 1, wordCharArray, q, sb);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkOneDirection(row - 1, column, wordCharArray, q, sb);
+        return checkOneDirection(matrix, row - 1, column, wordCharArray, q, sb);
     }
 
-    private StringBuilder checkRightAndDownDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkRightAndDownDirection(Character[][] matrix, StringBuilder sb,
+                                                     int row, int column,
                                                      char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkOneDirection(row, column + 1, wordCharArray, q, sb);
+        sb = checkOneDirection(matrix, row, column + 1, wordCharArray, q, sb);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkOneDirection(row + 1, column, wordCharArray, q, sb);
+        return checkOneDirection(matrix,row + 1, column, wordCharArray, q, sb);
     }
 
-    private StringBuilder checkLeftAndDownDirection(StringBuilder sb, int row, int column,
-                                                    char[] wordCharArray, int q) {
+    private StringBuilder checkLeftAndDownDirection(Character[][] matrix, StringBuilder sb, int row,
+                                                    int column, char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkOneDirection(row, column - 1, wordCharArray, q, sb);
+        sb = checkOneDirection(matrix, row, column - 1, wordCharArray, q, sb);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkOneDirection(row + 1, column, wordCharArray, q, sb);
+        return checkOneDirection(matrix, row + 1, column, wordCharArray, q, sb);
     }
 
-    private StringBuilder checkLeftAndRightAndDownDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkLeftAndRightAndDownDirection(Character[][] matrix,
+                                                            StringBuilder sb, int row,
+                                                            int column,
                                                             char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkOneDirection(row, column - 1, wordCharArray, q, sb);
+        sb = checkOneDirection(matrix, row, column - 1, wordCharArray, q, sb);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkRightAndDownDirection(sb, row, column, wordCharArray, q);
+        return checkRightAndDownDirection(matrix, sb, row, column, wordCharArray, q);
     }
 
-    private StringBuilder checkUpAndRightDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkUpAndRightDirection(Character[][] matrix,
+                                                   StringBuilder sb, int row, int column,
                                                    char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkOneDirection(row - 1, column, wordCharArray, q, sb);
+        sb = checkOneDirection(matrix, row - 1, column, wordCharArray, q, sb);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkOneDirection(row, column + 1, wordCharArray, q, sb);
+        return checkOneDirection(matrix, row, column + 1, wordCharArray, q, sb);
     }
 
-    private StringBuilder checkLeftAndUpAndRightDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkLeftAndUpAndRightDirection(Character[][] matrix,
+                                                          StringBuilder sb, int row, int column,
                                                           char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkLeftAndUpDirection(sb, row, column, wordCharArray, q);
+        sb = checkLeftAndUpDirection(matrix, sb, row, column, wordCharArray, q);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkOneDirection(row, column + 1, wordCharArray, q, sb);
+        return checkOneDirection(matrix, row, column + 1, wordCharArray, q, sb);
     }
 
-    private StringBuilder checkUpAndRightAndDownDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkUpAndRightAndDownDirection(Character[][] matrix,
+                                                          StringBuilder sb, int row, int column,
                                                           char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkOneDirection(row - 1, column, wordCharArray, q, sb);
+        sb = checkOneDirection(matrix, row - 1, column, wordCharArray, q, sb);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkRightAndDownDirection(sb, row, column, wordCharArray, q);
+        return checkRightAndDownDirection(matrix, sb, row, column, wordCharArray, q);
     }
 
-    private StringBuilder checkLeftAndUpAndDownDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkLeftAndUpAndDownDirection(Character[][] matrix,
+                                                         StringBuilder sb, int row, int column,
                                                          char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkLeftAndUpDirection(sb, row, column, wordCharArray, q);
+        sb = checkLeftAndUpDirection(matrix, sb, row, column, wordCharArray, q);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkOneDirection(row + 1, column, wordCharArray, q, sb);
+        return checkOneDirection(matrix, row + 1, column, wordCharArray, q, sb);
     }
 
-    private StringBuilder checkAllDirection(StringBuilder sb, int row, int column,
+    private StringBuilder checkAllDirection(Character[][] matrix,
+                                            StringBuilder sb, int row, int column,
                                             char[] wordCharArray, int q) {
         int lenBefore = sb.length();
-        sb = checkLeftAndUpDirection(sb, row, column, wordCharArray, q);
+        sb = checkLeftAndUpDirection(matrix, sb, row, column, wordCharArray, q);
         if (sb.length() != lenBefore) {
             return sb;
         }
-        return checkRightAndDownDirection(sb, row, column, wordCharArray, q);
+        return checkRightAndDownDirection(matrix, sb, row, column, wordCharArray, q);
     }
 
-    private StringBuilder checkCeil(StringBuilder sb, int row, int column,
+    private StringBuilder checkCeil(Character[][] matrix, StringBuilder sb, int row, int column,
                                     char[] wordCharArray, int q) {
         if (q == wordCharArray.length) {
             return sb;
         }
         if (row == 0) {
             if (column == 0) {
-                return checkRightAndDownDirection(sb, row, column, wordCharArray, q);
+                return checkRightAndDownDirection(matrix, sb, row, column, wordCharArray, q);
             }
 
             if (column == matrix.length - 1) {
-                return checkLeftAndDownDirection(sb, row, column, wordCharArray, q);
+                return checkLeftAndDownDirection(matrix, sb, row, column, wordCharArray, q);
             }
 
-            return checkLeftAndRightAndDownDirection(sb, row, column, wordCharArray, q);
+            return checkLeftAndRightAndDownDirection(matrix, sb, row, column, wordCharArray, q);
         }
 
         if (row == matrix.length - 1) {
             if (column == 0) {
-                return checkUpAndRightDirection(sb, row, column, wordCharArray, q);
+                return checkUpAndRightDirection(matrix, sb, row, column, wordCharArray, q);
             }
 
             if (column == matrix.length - 1) {
-                return checkLeftAndUpDirection(sb, row, column, wordCharArray, q);
+                return checkLeftAndUpDirection(matrix, sb, row, column, wordCharArray, q);
             }
-            return checkLeftAndUpAndRightDirection(sb, row, column, wordCharArray, q);
+            return checkLeftAndUpAndRightDirection(matrix, sb, row, column, wordCharArray, q);
         }
 
         if (column == 0) {
-            return checkUpAndRightAndDownDirection(sb, row, column, wordCharArray, q);
+            return checkUpAndRightAndDownDirection(matrix, sb, row, column, wordCharArray, q);
         }
 
         if (column == matrix.length - 1) {
-            return checkLeftAndUpAndDownDirection(sb, row, column, wordCharArray, q);
+            return checkLeftAndUpAndDownDirection(matrix, sb, row, column, wordCharArray, q);
         }
 
-        return checkAllDirection(sb, row, column, wordCharArray, q);
+        return checkAllDirection(matrix, sb, row, column, wordCharArray, q);
     }
+
 }
