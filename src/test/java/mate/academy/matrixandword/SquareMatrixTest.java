@@ -26,13 +26,13 @@ public class SquareMatrixTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void wordLengthBiggerThanMatrixLength() {
-        Character[][] matrix = matrixService.getSquareMatrixCharacters("QLGY");
+        char[][] matrix = matrixService.getSquareMatrixCharacters("QLGY");
         matrixService.getCeilOfLetters(matrix, "hello");
     }
 
     @Test
     public void getCeilOfLettersOk() {
-        Character[][] matrix = matrixService.getSquareMatrixCharacters("QUENPVKIJAVNGEAG");
+        char[][] matrix = matrixService.getSquareMatrixCharacters("QUENPVKIJAVNGEAG");
         String actualResult = matrixService.getCeilOfLetters(matrix, "king");
         Assert.assertEquals("[1, 2] -> [1, 3] -> [2, 3] -> [3, 3]", actualResult);
 
@@ -42,7 +42,7 @@ public class SquareMatrixTest {
 
     @Test
     public void matrixNotConsistWord() {
-        Character[][] matrix = matrixService.getSquareMatrixCharacters("QUENPVKIJAVNGEAG");
+        char[][] matrix = matrixService.getSquareMatrixCharacters("QUENPVKIJAVNGEAG");
         String actualResult = matrixService.getCeilOfLetters(matrix,"hello");
         Assert.assertEquals("", actualResult);
     }
