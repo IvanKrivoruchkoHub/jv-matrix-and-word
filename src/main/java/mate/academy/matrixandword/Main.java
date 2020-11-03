@@ -3,7 +3,7 @@ package mate.academy.matrixandword;
 public class Main {
     public static void main(String[] args) {
         SquareMatrixService squareMatrixService = new SquareMatrixService();
-        char[][] matrix = squareMatrixService.getSquareMatrixCharacters(args[0]);
+        char[][] matrix =  squareMatrixService.getSquareMatrixCharacters(args[0]);
         System.out.println(squareMatrixService.getCeilOfLetters(matrix, args[1]));
     }
 }

@@ -31,14 +31,13 @@ public class SquareMatrixService {
         if (word.length() > matrix.length * matrix.length) {
             throw new IllegalArgumentException("Word length is bigger than count of matrix ceil");
         }
-        int numberOfLetter = 0;
         List<String> resultCeils = new ArrayList<>();
         char[] wordCharArray = word.toUpperCase().toCharArray();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                if (wordCharArray[numberOfLetter] == matrix[i][j]) {
+                if (wordCharArray[0] == matrix[i][j]) {
                     resultCeils.add(String.format("[%d, %d]", i, j));
-                    if (!checkCeil(matrix, resultCeils, i, j, wordCharArray, numberOfLetter + 1)) {
+                    if (!checkCeil(matrix, resultCeils, i, j, wordCharArray)) {
                         resultCeils = new ArrayList<>();
                     } else {
                         return String.join(" -> ", resultCeils);
@@ -50,13 +49,13 @@ public class SquareMatrixService {
     }
 
     private boolean checkOneDirection(char[][] matrix, int row, int column,
-                                            char[] wordCharArray, int numberOfLetter,
+                                            char[] wordCharArray,
                                       List<String> resultCeils) {
-        if (matrix[row][column] == wordCharArray[numberOfLetter]
+        if (matrix[row][column] == wordCharArray[resultCeils.size()]
                 && resultCeils.indexOf(String.format("[%d, %d]", row, column)) == -1) {
             int sizeBeforeAppend = resultCeils.size();
             resultCeils.add(String.format("[%d, %d]", row, column));
-            boolean checkCeilRes = checkCeil(matrix, resultCeils, row, column, wordCharArray, numberOfLetter + 1);
+            boolean checkCeilRes = checkCeil(matrix, resultCeils, row, column, wordCharArray);
             if (!checkCeilRes) {
                 resultCeils.subList(sizeBeforeAppend, resultCeils.size()).clear();
                 return false;
@@ -68,119 +67,113 @@ public class SquareMatrixService {
 
     private boolean checkLeftAndUpDirection(char[][] matrix, List<String> resultCeils,
                                                   int row, int column,
-                                                  char[] wordCharArray, int numberOfLetter) {
-        return checkOneDirection(matrix, row, column - 1, wordCharArray, numberOfLetter, resultCeils)
-            || checkOneDirection(matrix, row - 1, column, wordCharArray, numberOfLetter, resultCeils);
+                                                  char[] wordCharArray) {
+        return checkOneDirection(matrix, row, column - 1, wordCharArray, resultCeils)
+            || checkOneDirection(matrix, row - 1, column, wordCharArray, resultCeils);
     }
 
     private boolean checkRightAndDownDirection(char[][] matrix, List<String> resultCeils,
                                                      int row, int column,
-                                                     char[] wordCharArray,
-                                                     int numberOfLetter) {
-        return checkOneDirection(matrix, row, column + 1, wordCharArray, numberOfLetter, resultCeils)
-            || checkOneDirection(matrix,row + 1, column, wordCharArray, numberOfLetter, resultCeils);
+                                                     char[] wordCharArray) {
+        return checkOneDirection(matrix, row, column + 1, wordCharArray, resultCeils)
+            || checkOneDirection(matrix,row + 1, column, wordCharArray, resultCeils);
     }
 
     private boolean checkLeftAndDownDirection(char[][] matrix, List<String> resultCeils,
                                                     int row, int column,
-                                                    char[] wordCharArray,
-                                                    int numberOfLetter) {
-        return checkOneDirection(matrix, row, column - 1, wordCharArray, numberOfLetter, resultCeils)
-            || checkOneDirection(matrix, row + 1, column, wordCharArray, numberOfLetter, resultCeils);
+                                                    char[] wordCharArray) {
+        return checkOneDirection(matrix, row, column - 1, wordCharArray, resultCeils)
+            || checkOneDirection(matrix, row + 1, column, wordCharArray, resultCeils);
     }
 
     private boolean checkLeftAndRightAndDownDirection(char[][] matrix,
                                                       List<String> resultCeils, int row,
                                                             int column,
-                                                            char[] wordCharArray,
-                                                            int numberOfLetter) {
-        return  checkOneDirection(matrix, row, column - 1, wordCharArray, numberOfLetter, resultCeils)
-            || checkRightAndDownDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter);
+                                                            char[] wordCharArray) {
+        return  checkOneDirection(matrix, row, column - 1, wordCharArray, resultCeils)
+            || checkRightAndDownDirection(matrix, resultCeils, row, column, wordCharArray);
     }
 
     private boolean checkUpAndRightDirection(char[][] matrix, List<String> resultCeils,
                                                    int row, int column,
-                                                   char[] wordCharArray, int numberOfLetter) {
-        return  checkOneDirection(matrix, row - 1, column, wordCharArray, numberOfLetter, resultCeils)
-            || checkOneDirection(matrix, row, column + 1, wordCharArray, numberOfLetter, resultCeils);
+                                                   char[] wordCharArray) {
+        return  checkOneDirection(matrix, row - 1, column, wordCharArray, resultCeils)
+            || checkOneDirection(matrix, row, column + 1, wordCharArray, resultCeils);
     }
 
     private boolean checkLeftAndUpAndRightDirection(char[][] matrix, List<String> resultCeils,
                                                           int row, int column,
-                                                          char[] wordCharArray,
-                                                          int numberOfLetter) {
-        return  checkLeftAndUpDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter)
-            || checkOneDirection(matrix, row, column + 1, wordCharArray, numberOfLetter, resultCeils);
+                                                          char[] wordCharArray) {
+        return  checkLeftAndUpDirection(matrix, resultCeils, row, column, wordCharArray)
+            || checkOneDirection(matrix, row, column + 1, wordCharArray, resultCeils);
     }
 
     private boolean checkUpAndRightAndDownDirection(char[][] matrix,
                                                     List<String> resultCeils, int row, int column,
-                                                          char[] wordCharArray,
-                                                          int numberOfLetter) {
-        return  checkOneDirection(matrix, row - 1, column, wordCharArray, numberOfLetter, resultCeils)
-            || checkRightAndDownDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter);
+                                                          char[] wordCharArray) {
+        return  checkOneDirection(matrix, row - 1, column, wordCharArray, resultCeils)
+            || checkRightAndDownDirection(matrix, resultCeils, row, column, wordCharArray);
     }
 
     private boolean checkLeftAndUpAndDownDirection(char[][] matrix,
                                                    List<String> resultCeils, int row, int column,
-                                                         char[] wordCharArray, int numberOfLetter) {
-        return  checkLeftAndUpDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter)
-            || checkOneDirection(matrix, row + 1, column, wordCharArray, numberOfLetter, resultCeils);
+                                                         char[] wordCharArray) {
+        return  checkLeftAndUpDirection(matrix, resultCeils, row, column, wordCharArray)
+            || checkOneDirection(matrix, row + 1, column, wordCharArray, resultCeils);
     }
 
     private boolean checkAllDirection(char[][] matrix,
                                       List<String> resultCeils, int row, int column,
-                                            char[] wordCharArray,
-                                            int numberOfLetter) {
-        return  checkLeftAndUpDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter)
-            || checkRightAndDownDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter);
+                                            char[] wordCharArray) {
+        return  checkLeftAndUpDirection(matrix, resultCeils, row, column, wordCharArray)
+            || checkRightAndDownDirection(matrix, resultCeils, row, column, wordCharArray);
     }
 
     private boolean checkCeil(char[][] matrix, List<String> resultCeils, int row, int column,
-                                    char[] wordCharArray, int numberOfLetter) {
-        if (numberOfLetter == wordCharArray.length) {
+                                    char[] wordCharArray) {
+        if (resultCeils.size() == wordCharArray.length) {
             return true;
         }
         if (row == 0) {
             if (column == 0) {
                 return checkRightAndDownDirection(matrix, resultCeils, row, column,
-                        wordCharArray, numberOfLetter);
+                        wordCharArray);
             }
 
             if (column == matrix.length - 1) {
                 return checkLeftAndDownDirection(matrix, resultCeils, row, column,
-                        wordCharArray, numberOfLetter);
+                        wordCharArray);
             }
 
             return checkLeftAndRightAndDownDirection(matrix, resultCeils, row, column,
-                    wordCharArray, numberOfLetter);
+                    wordCharArray);
         }
 
         if (row == matrix.length - 1) {
             if (column == 0) {
                 return checkUpAndRightDirection(matrix, resultCeils, row, column,
-                        wordCharArray, numberOfLetter);
+                        wordCharArray);
             }
 
             if (column == matrix.length - 1) {
                 return checkLeftAndUpDirection(matrix, resultCeils, row, column,
-                        wordCharArray, numberOfLetter);
+                        wordCharArray);
             }
             return checkLeftAndUpAndRightDirection(matrix, resultCeils, row, column,
-                    wordCharArray, numberOfLetter);
+                    wordCharArray);
         }
 
         if (column == 0) {
             return checkUpAndRightAndDownDirection(matrix, resultCeils, row, column,
-                    wordCharArray, numberOfLetter);
+                    wordCharArray);
         }
 
         if (column == matrix.length - 1) {
             return checkLeftAndUpAndDownDirection(matrix, resultCeils, row, column,
-                    wordCharArray, numberOfLetter);
+                    wordCharArray);
         }
 
-        return checkAllDirection(matrix, resultCeils, row, column, wordCharArray, numberOfLetter);
+        return checkAllDirection(matrix, resultCeils, row, column, wordCharArray);
     }
 
 }
